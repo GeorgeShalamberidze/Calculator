@@ -13,28 +13,35 @@ function App() {
         setResult(0)
         setEvaluated(false)
         setDot(true)
+        setHundred(true)
     }
-
     const clear = () => {
-        setValue(prev => prev.split('').slice(0, prev.length - 1).join(''))
-        console.log(value)
         if (value === 'NaN' || value.length < 2) {
-            setValue('0')
-            setResult(0)
+            allClear()
+        }
+        else {
+            setValue(value.split('').slice(0, value.length - 1).join('')
+            )
         }
         setEvaluated(false)
         setDot(true)
+        setHundred(true)
     }
 
     const hund = () => {
-        if (hundred) {
-            setValue(value / 100)
-            setHundred(false)
+        if (!evaluated && !value.toString().match(/[\*/+-]/)) {
+            if (hundred) {
+                setValue(value / 100)
+                setHundred(false)
+                return
+            }
+            else {
+                setValue(value * 100)
+                setHundred(true)
+                return
+            }
         }
-        else {
-            setValue(value * 100)
-            setHundred(true)
-        }
+        setHundred(true)
     }
 
     const handleValue = (char) => {
@@ -48,12 +55,11 @@ function App() {
             }
             return
         }
-
         if (value.length > 16) {
             setValue("Max Number of Digits")
             setTimeout(() => setValue(value), 500)
         }
-        if (value.includes('.') && char === '.') {
+        if (value.toString().includes('.') && char === '.') {
             setValue(value)
             return;
         }
@@ -61,11 +67,14 @@ function App() {
     }
 
     const evaluate = () => {
-        setResult(eval(value.match(/(\*|\+|\/|-)?(\.|\-)?\d+/g).join('')))
-        setValue(prev => prev + '=')
-        setEvaluated(true)
-        setDot(true)
-    }
+        if (value.match(operands)){
+            setResult(eval(value.match(/(\*|\+|\/|-)?(\.|\-)?\d+/g).join('')))
+            setValue(prev => prev + '=')
+            setEvaluated(true)
+            setDot(true)
+        }
+        return
+    }   
 
     const operators = (char) => {
         setValue(prev => prev + char)
@@ -78,7 +87,6 @@ function App() {
             }
             return
         }
-
 
         if (value[value.length - 1] == '*' || value[value.length - 1] == '/' || value[value.length - 1] == '+' || value[value.length - 1] == '-') {
             setValue(value.replace(value[value.length - 1], char))
@@ -166,6 +174,7 @@ function Button({ value, evaluate, clear, allClear, hund, operators, decimal }) 
             <button
                 id="divideByHundered"
                 onClick={hund}
+                value="%"
             >
                 %
             </button>
