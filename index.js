@@ -67,7 +67,7 @@ function App() {
     }
 
     const evaluate = () => {
-        if (value.match(operands)){
+        if (value.match(operands) && !value.match(/[=]/)){
             setResult(eval(value.match(/(\*|\+|\/|-)?(\.|\-)?\d+/g).join('')))
             setValue(prev => prev + '=')
             setEvaluated(true)
