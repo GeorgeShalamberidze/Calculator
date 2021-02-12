@@ -29,6 +29,9 @@ function App() {
     }
 
     const hund = () => {
+        if(value == '0'){
+            return
+        }
         if (!evaluated && !value.toString().match(/[\*/+-]/)) {
             if (hundred) {
                 setValue(value / 100)
