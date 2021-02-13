@@ -1,4 +1,3 @@
-const de = (/(?<=\..*)\./g, '');
 const operands = /[\*+-/]/gi
 function App() {
 
